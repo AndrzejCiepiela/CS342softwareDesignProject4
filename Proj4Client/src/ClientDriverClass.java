@@ -114,11 +114,6 @@ public class ClientDriverClass extends Application{
 		lizard.setOnAction(choice);
 		spock.setOnAction(choice);
 		
-		/*
-		 * returnToLobby.setOnAction((ActionEvent event)->{
-		 * 
-		 * });
-		 */
 		// root node for clientScene
 		BorderPane pane = new BorderPane();
 		pane.setPadding(new Insets(30));
@@ -227,7 +222,6 @@ public class ClientDriverClass extends Application{
 		// create and disable quit button
 		returnToLobby = new Button("quit");
 		returnToLobby.setPadding(new Insets(5, 20, 5, 20));
-		returnToLobby.setDisable(true);
 		
 		// set window title
 		primaryStage.setTitle("Client Window");
@@ -242,6 +236,8 @@ public class ClientDriverClass extends Application{
 			
 			// ID of opponent is registered depending on which button was pressed
 			String ID = ((Button)event.getSource()).getText();
+			
+			returnToLobby.setDisable(true);
 
 			// send a challenge message to the server
 			try{
@@ -265,6 +261,8 @@ public class ClientDriverClass extends Application{
 			scissors.setDisable(false);
 			lizard.setDisable(false);
 			spock.setDisable(false);
+			
+			returnToLobby.setDisable(true);
 			
 			String acceptMessage = "accepted";
 			
@@ -293,10 +291,17 @@ public class ClientDriverClass extends Application{
 		
 		// when player presses quit button, return to lobby
 		returnToLobby.setOnAction(e -> {
-			//System.out.println("Hello");
+			
 			primaryStage.setScene(lobbyS);
+			accept.setDisable(true);
 			
-			
+			// send server message that client quits and is returning to lobby
+			try {
+				conn.send("quit");
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		});
 		
 		primaryStage.show();

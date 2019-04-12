@@ -1,6 +1,7 @@
 import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -40,6 +41,7 @@ public class ClientDriverClass extends Application{
 	String ID;
 	Label idLabel;
 	Object object;
+
 	
 	Button rock, paper, scissors, lizard, spock;
 	
@@ -110,6 +112,11 @@ public class ClientDriverClass extends Application{
 		lizard.setOnAction(choice);
 		spock.setOnAction(choice);
 		
+		/*
+		 * returnToLobby.setOnAction((ActionEvent event)->{
+		 * 
+		 * });
+		 */
 		// root node for clientScene
 		BorderPane pane = new BorderPane();
 		pane.setPadding(new Insets(30));
@@ -223,8 +230,10 @@ public class ClientDriverClass extends Application{
 		// set window title
 		primaryStage.setTitle("Client Window");
 		
+		//////////////////////////////////////////////////////////////////////////
+		Scene lobbyS = new Scene(createLobby());
 		// create first scene
-		primaryStage.setScene(new Scene(createLobby()));
+		primaryStage.setScene(lobbyS);
 		
 		// when challenge button is pressed
 		EventHandler<ActionEvent> challengeButtons = event -> {
@@ -280,6 +289,8 @@ public class ClientDriverClass extends Application{
 		
 		// when player presses quit button, return to lobby
 		returnToLobby.setOnAction(e -> {
+			//System.out.println("Hello");
+			primaryStage.setScene(lobbyS);
 			
 			
 		});

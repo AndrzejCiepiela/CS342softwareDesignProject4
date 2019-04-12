@@ -259,7 +259,10 @@ public abstract class ServerNetwork {
 									clients.get(opponentID - 1).out.writeObject("There must be a winner, pick again");
 								}
 								else {
-									
+									inGame = false;///////////////////////////////////////////
+									//lookingForGame = false;
+									//isHost = false;
+									isChallenged = false;
 									// send players message that the game is over
 									out.writeObject("Thanks for playing, press quit to return to lobby");
 									clients.get(opponentID - 1).out.writeObject("Thanks for playing, press quit to return to lobby");
@@ -295,7 +298,10 @@ public abstract class ServerNetwork {
 									clients.get(opponentID - 1).out.writeObject("There must be a winner, pick again");
 								}
 								else {
-									
+									inGame = false;/////////////////////////////////////////////
+									//lookingForGame = false;
+									isHost = false;
+									isChallenged = false;
 									// send players message that the game is over
 									out.writeObject("Thanks for playing, press quit to return to lobby");
 									clients.get(opponentID - 1).out.writeObject("Thanks for playing, press quit to return to lobby");
@@ -308,6 +314,7 @@ public abstract class ServerNetwork {
 								clients.get(opponentID - 1).madeChoice = false;
 							}
 						}
+						
 					}
 					
 					// run this block of code if not in a game
@@ -359,7 +366,9 @@ public abstract class ServerNetwork {
 								callback.accept("Player " + opponentID + " is now playing Player " + myID);
 							}
 						}
+						
 					}
+					
 				}
 			}
 			catch(Exception e) {

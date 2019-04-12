@@ -234,6 +234,14 @@ public abstract class ServerNetwork {
 					
 					Serializable data = (Serializable) in.readObject();
 					
+					// when player wants to return to the lobby
+					if(data.toString().intern() == "quit") {
+						inGame = false;
+						lookingForGame = false;
+						isHost = false;
+						isChallenged = false;
+					}
+					
 					// if this client is currently playing a game, send choice to server
 					if(inGame) {
 						
@@ -264,11 +272,6 @@ public abstract class ServerNetwork {
 									clients.get(opponentID - 1).out.writeObject("There must be a winner, pick again");
 								}
 								else {
-									/////////////Adding these actually prevent two games from going on simultaneously
-									inGame = false;///////////////////////////////////////////
-									//lookingForGame = false;
-									//isHost = false;
-									isChallenged = false;
 									// send players message that the game is over
 									out.writeObject("Thanks for playing, press quit to return to lobby");
 									clients.get(opponentID - 1).out.writeObject("Thanks for playing, press quit to return to lobby");
@@ -304,10 +307,6 @@ public abstract class ServerNetwork {
 									clients.get(opponentID - 1).out.writeObject("There must be a winner, pick again");
 								}
 								else {
-									inGame = false;/////////////////////////////////////////////
-									//lookingForGame = false;
-									isHost = false;
-									isChallenged = false;
 									// send players message that the game is over
 									out.writeObject("Thanks for playing, press quit to return to lobby");
 									clients.get(opponentID - 1).out.writeObject("Thanks for playing, press quit to return to lobby");
@@ -324,7 +323,7 @@ public abstract class ServerNetwork {
 					}
 					
 					// run this block of code if not in a game
-					if(!inGame) {
+					if(!inGame && data.toString().intern() != "quit") {
 						
 						// if client is challenging a player
 						if(lookingForGame == false && !isChallenged) {

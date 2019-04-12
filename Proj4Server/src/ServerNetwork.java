@@ -327,25 +327,40 @@ public abstract class ServerNetwork {
 						
 						// if client is challenging a player
 						if(lookingForGame == false && !isChallenged) {
-							
+							boolean play = false;
 							// get ID of the opponent
 							int tmpID = Integer.parseInt(data.toString());
 							opponentID = clients.get(tmpID - 1).myID;
 							
-							// this client is now waiting for response from opponent
-							lookingForGame = true;
-							isHost = true;
-							
-							// send message to server that a client has challenged someone
-							callback.accept("Player " + myID + " is challenging Player " + opponentID);
-							
-							// send message to challenger
-							out.writeObject("joined game, waiting for opponent...");
-							
-							// have server send message to opponent that they are being challenged
-							clients.get(opponentID - 1).out.writeObject("Your being challenged");
-							clients.get(opponentID - 1).isChallenged = true;
-							clients.get(opponentID - 1).opponentID = myID;
+							if(!clients.get(opponentID-1).inGame) {
+								clients.get(opponentID - 1).out.writeObject("Your being challenged");
+								play=true;
+							}
+							else {
+								out.writeObject("Player is in game! Click return to lobby");
+								
+							}
+							if(play) {
+								// this client is now waiting for response from opponent
+								lookingForGame = true;
+								isHost = true;
+								
+								// send message to server that a client has challenged someone
+								callback.accept("Player " + myID + " is challenging Player " + opponentID);
+								
+								// send message to challenger
+								//out.writeObject("joined game, waiting for opponent...");
+								
+								// have server send message to opponent that they are being challenged
+								if(!inGame) {
+									// send message to challenger
+									out.writeObject("joined game, waiting for opponent...");
+									
+								}
+								
+								clients.get(opponentID - 1).isChallenged = true;
+								clients.get(opponentID - 1).opponentID = myID;
+							}
 						}
 						
 						// if client is waiting for response from opponent
@@ -361,6 +376,7 @@ public abstract class ServerNetwork {
 							// if answer is yes
 							if(data.toString().intern() == "accepted") {
 								inGame = true;
+								 
 								
 								// send challenger message that their challenge was accepted
 								clients.get(opponentID - 1).out.writeObject("Opponent has joined your game, begin playing");
@@ -369,6 +385,14 @@ public abstract class ServerNetwork {
 								out.writeObject("You have joined game, begin playing");
 								
 								callback.accept("Player " + opponentID + " is now playing Player " + myID);
+								
+							
+								
+								for(int i = 0; i<clients.size(); i++) {
+									if(clients.get(i)!=clients.get(opponentID-1)) {
+										
+									}
+								}
 							}
 						}
 						

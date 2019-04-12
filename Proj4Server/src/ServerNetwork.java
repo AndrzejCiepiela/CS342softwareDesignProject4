@@ -27,7 +27,12 @@ public abstract class ServerNetwork {
 	public void send(Serializable data) throws Exception{
 		
 		for(int i = 0; i < clients.size(); i++) {
-			clients.get(i).out.writeObject(data);
+			try {
+				clients.get(i).out.writeObject(data);
+		
+			}catch(Exception e) {
+				System.out.println("One of the clients closed");
+			}
 		}
 	}
 	
@@ -259,6 +264,7 @@ public abstract class ServerNetwork {
 									clients.get(opponentID - 1).out.writeObject("There must be a winner, pick again");
 								}
 								else {
+									/////////////Adding these actually prevent two games from going on simultaneously
 									inGame = false;///////////////////////////////////////////
 									//lookingForGame = false;
 									//isHost = false;
@@ -374,9 +380,14 @@ public abstract class ServerNetwork {
 			catch(Exception e) {
 				// send an updated list to the remaining players connected,
 				// one without this player
-				activeConnections.set(myID,"false");
 				try {
-				send(convertToString(activeConnections)); }
+					activeConnections.set(myID,"false");
+				}catch(Exception f) {
+					System.out.println("Socket was already closed");
+				}
+
+				try {
+					send(convertToString(activeConnections)); }
 				catch(Exception f) {
 					f.printStackTrace();
 				}

@@ -322,6 +322,10 @@ public class ClientDriverClass extends Application{
 			Platform.runLater(()->{
 				messages.appendText(data.toString() + "\n");
 				
+				// if challenger is in game
+				if(data.toString().intern() == "Player is in game! Click return to lobby") {
+					returnToLobby.setDisable(false);
+				}
 				// if being challenged
 				if(data.toString().intern() == "Your being challenged") {
 					accept.setDisable(false);

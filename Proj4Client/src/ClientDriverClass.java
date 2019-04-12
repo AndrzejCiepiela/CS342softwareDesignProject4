@@ -14,6 +14,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -42,7 +44,7 @@ public class ClientDriverClass extends Application{
 	Label idLabel;
 	Object object;
 
-	
+	MenuButton dropdownPlayerList = new MenuButton("Select an opponent");
 	Button rock, paper, scissors, lizard, spock;
 	
 	private ClientNetwork conn = createClient("127.0.0.1", 5555);
@@ -282,8 +284,10 @@ public class ClientDriverClass extends Application{
 		// update buttons by setting them to have an action event
 		update.setOnAction(e -> {
 			
+			
 			for(int i = 0; i < challengeBtns.size(); i++) {
 				challengeBtns.get(i).setOnAction(challengeButtons);
+				
 			}
 		});
 		
@@ -366,14 +370,16 @@ public class ClientDriverClass extends Application{
 						challengeBtns = updateLobby(updatedConnections);
 						
 						VBox root = new VBox();
-						
+						dropdownPlayerList.getItems().clear();
 						// update buttons
 						for(int i = 0; i < challengeBtns.size(); i++) {
 							root.getChildren().add(challengeBtns.get(i));
+							
+							dropdownPlayerList.getItems().add(new MenuItem("", challengeBtns.get(i)));
 						}
 						
 						// set buttons to lobby
-						lobby.setRight(root);
+						lobby.setRight(dropdownPlayerList);
 						
 						// call update event handler
 						update.fire();

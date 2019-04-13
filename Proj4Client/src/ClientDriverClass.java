@@ -294,6 +294,7 @@ public class ClientDriverClass extends Application{
 			
 			primaryStage.setScene(lobbyS);
 			accept.setDisable(true);
+			enableButtons();
 			
 			// send server message that client quits and is returning to lobby
 			try {
@@ -305,6 +306,20 @@ public class ClientDriverClass extends Application{
 		});
 		
 		primaryStage.show();
+	}
+	
+	//disables the challenge buttons, specifically for when a player is being challenged
+	void disableButtons() {
+		for(int i =0; i<challengeBtns.size(); i++) {
+			challengeBtns.get(i).setDisable(true);
+
+		}
+	}
+
+	public void enableButtons() {
+		for(int i=0; i<challengeBtns.size(); i++) {
+			challengeBtns.get(i).setDisable(false);
+		}
 	}
 	
 	@Override
@@ -328,6 +343,8 @@ public class ClientDriverClass extends Application{
 				}
 				// if being challenged
 				if(data.toString().intern() == "Your being challenged") {
+					//disable the challenge buttons and enable the accept button
+					disableButtons();
 					accept.setDisable(false);
 				}
 				

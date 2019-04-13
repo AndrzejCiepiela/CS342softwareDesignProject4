@@ -198,6 +198,7 @@ public abstract class ServerNetwork {
 	// separate thread for the client
 	class myThread extends Thread {
 		
+		private int myIndex;
 		private Socket socket;
 		private ObjectOutputStream out;
 		private int myID;
@@ -213,6 +214,7 @@ public abstract class ServerNetwork {
 		myThread(Socket s, int i) {
 			this.socket = s;
 			this.myID = i;
+			this.myIndex = i - 1;
 		}
 		
 		public void run() {
@@ -240,6 +242,8 @@ public abstract class ServerNetwork {
 						lookingForGame = false;
 						isHost = false;
 						isChallenged = false;
+						
+						callback.accept("Player " + myID + " has returned to the lobby");
 					}
 					
 					// if this client is currently playing a game, send choice to server
@@ -404,7 +408,7 @@ public abstract class ServerNetwork {
 				// send an updated list to the remaining players connected,
 				// one without this player
 				try {
-					activeConnections.set(myID,"false");
+					activeConnections.set(myIndex,"false");
 				}catch(Exception f) {
 					System.out.println("Socket was already closed");
 				}
